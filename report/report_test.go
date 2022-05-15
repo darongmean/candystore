@@ -1,4 +1,4 @@
-package snack
+package report
 
 import "testing"
 
