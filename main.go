@@ -13,12 +13,6 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-type Favourite struct {
-	Name           string `json:"name"`
-	FavouriteSnack string `json:"favouriteSnack"`
-	TotalSnacks    uint64 `json:"totalSnacks"`
-}
-
 func main() {
 	app := &cli.App{
 		Name:  "candystore",
@@ -41,7 +35,6 @@ func main() {
 						return err
 					}
 					execFavouriteCommand(fileName)
-					// TODO: return error
 					return nil
 				},
 			},
@@ -88,10 +81,10 @@ func execFavouriteCommand(fileName string) {
 	records, err := r.ReadAll()
 	check(err)
 
-	favourites, err := report.ListTopCustomers(records)
+	customers, err := report.ListTopCustomers(records)
 	check(err)
 
-	str, err := json.Marshal(favourites)
+	str, err := json.MarshalIndent(customers, "", "    ")
 	check(err)
 
 	fmt.Print(string(str))
