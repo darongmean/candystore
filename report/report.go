@@ -11,6 +11,7 @@ type TopCustomer struct {
 	TotalSnacks    uint64 `json:"totalSnacks"`
 }
 
+// List top customers and their favourites
 func ListTopCustomers(records [][]string) ([]TopCustomer, error) {
 	eatenByNameAndCandy, eatenByName, maxEatenByName, err := aggregateEaten(dropHeaderRow(records))
 	if err != nil {
@@ -20,13 +21,17 @@ func ListTopCustomers(records [][]string) ([]TopCustomer, error) {
 	customers := findFavouriteSnack(eatenByNameAndCandy, eatenByName, maxEatenByName)
 
 	sort.Slice(customers, func(i, j int) bool {
-		return customers[i].TotalSnacks > customers[j].TotalSnacks
+		return customers[i].TotalSnacks >= customers[j].TotalSnacks
 	})
 
 	return customers, nil
 }
 
 func dropHeaderRow(records [][]string) [][]string {
+	if len(records) == 0 {
+		return records
+	}
+
 	return records[1:]
 }
 
